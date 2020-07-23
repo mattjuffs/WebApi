@@ -17,6 +17,7 @@ namespace Data
         {
 
         }
+
         public IModel GetModel()
         {
             return Model;
@@ -26,6 +27,12 @@ namespace Data
         {
             modelBuilder.Entity<Entities.Account>().ToTable("tbl_Account");
             modelBuilder.Entity<Entities.MeterReading>().ToTable("tbl_MeterReading");
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            string connectionString = "Server=[server];Initial Catalog=[databasename];Persist Security Info=False;User ID=[username];Password=[password];MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Application Name=webapi";// TODO: load this from a configuration file
+            optionsBuilder.UseSqlServer(connectionString);
         }
     }
 }
