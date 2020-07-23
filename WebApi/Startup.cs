@@ -30,8 +30,8 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<IAccountService, AccountService>();
-            services.AddSingleton<IMeterReadingService, MeterReadingService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IMeterReadingService, MeterReadingService>();
             services.AddDbContext<IDbContext, DataContext>();
         }
 
