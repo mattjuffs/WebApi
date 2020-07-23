@@ -84,11 +84,47 @@ namespace WebApi.Controllers
             // retrieve all Accounts
             var accounts = _accountService.GetAccounts();
 
-            // TODO: validate that the DTO (Meter Reading) matches an existing Account
-            // TODO: check meter reading doesn't already exist
-            // TODO: pass valid DTO to EF for inserting into DB - reading must be NNNNN
-            // TODO: return number of successful + failed results
+            var validMeterReadings = new List<Data.Entities.MeterReading>();
 
+            // validate that the DTO (Meter Reading) matches an existing Account
+            foreach (var meterReading in meterReadings)
+            {
+                var account = accounts.Where(a => a.AccountID == meterReading.AccountID).FirstOrDefault();
+                if (account == null)
+                {
+                    failed++;
+                }
+                else
+                {
+                    validMeterReadings.Add(meterReading);
+                    successful++;
+                }
+            }
+
+            // check meter reading doesn't already exist
+            var existingMeterReadings = _meterReadingService.GetMeterReadings();
+
+            foreach (var meterReading in validMeterReadings)
+            {
+                var existingMeterReading = existingMeterReadings.Where(mr =>
+                    mr.AccountID == meterReading.AccountID
+                    && mr.MeterReadingDateTime == meterReading.MeterReadingDateTime
+                ).FirstOrDefault();
+
+                if (existingMeterReading != null)
+                {
+                    // the meter reading is valid, but we've already captured it
+                    failed++;
+                    successful--;
+                }
+                else
+                {
+                    // pass valid DTO to EF for inserting into DB - reading must be NNNNN
+                    _meterReadingService.ImportMeterReading(meterReading);
+                }
+            }
+            
+            // return number of successful + failed results
             var response = new
             {
                 Successful = successful,
