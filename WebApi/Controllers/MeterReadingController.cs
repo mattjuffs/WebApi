@@ -42,8 +42,12 @@ namespace WebApi.Controllers
 
         // POST api/<MeterReadingController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public JsonResult Post([FromBody] string value)
         {
+            int successful = 0;
+            int failed = 0;
+            var meterReadings = new List<Data.Entities.MeterReading>();
+
             // convert the value into DTO
             var rows = value.Split(Environment.NewLine);
 
@@ -51,7 +55,31 @@ namespace WebApi.Controllers
             {
                 var csv = row.Split(",");
 
-            }            
+                if (csv.Count() < 3)// we need to have at least 3 columns in the CSV
+                {
+                    // TODO: log the failure
+                    failed++;
+                }
+                else
+                {
+                    try
+                    {
+                        var meterReading = new Data.Entities.MeterReading
+                        {
+                            AccountID = Convert.ToInt32(csv[0]),
+                            MeterReadingDateTime = Convert.ToDateTime(csv[1]),
+                            MeterReadValue = Convert.ToInt32(csv[2]),
+                        };
+
+                        meterReadings.Add(meterReading);
+                    }
+                    catch
+                    {
+                        // TODO: log the failure
+                        failed++;
+                    }
+                }
+            }
 
             // retrieve all Accounts
             var accounts = _accountService.GetAccounts();
@@ -60,6 +88,14 @@ namespace WebApi.Controllers
             // TODO: check meter reading doesn't already exist
             // TODO: pass valid DTO to EF for inserting into DB - reading must be NNNNN
             // TODO: return number of successful + failed results
+
+            var response = new
+            {
+                Successful = successful,
+                Failed = failed,
+            };
+
+            return new JsonResult(response);
         }
 
         // PUT api/<MeterReadingController>/5
