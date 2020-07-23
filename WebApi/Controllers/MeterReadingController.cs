@@ -84,7 +84,7 @@ namespace WebApi.Controllers
             }
 
             // retrieve all Accounts
-            var accounts = _accountService.GetAccounts();
+            var accounts = _accountService.GetAccounts();// optional: cache Accounts
 
             var validMeterReadings = new List<Data.Entities.MeterReading>();
 
@@ -94,6 +94,7 @@ namespace WebApi.Controllers
                 var account = accounts.Where(a => a.AccountID == meterReading.AccountID).FirstOrDefault();
                 if (account == null)
                 {
+                    // we don't recognise the account, so it's a failure
                     failed++;
                 }
                 else
