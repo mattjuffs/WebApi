@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Reflection;
-
 using Microsoft.Extensions.Configuration;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Data.Interfaces;
 
 namespace Data
 {
