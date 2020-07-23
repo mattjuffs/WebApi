@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Data.Interfaces
 {
-    interface IAccountService
+    public interface IAccountService
     {
         List<Entities.Account> GetAccounts();
     }
