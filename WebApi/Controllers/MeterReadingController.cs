@@ -26,18 +26,20 @@ namespace WebApi.Controllers
 
         // GET: api/<MeterReadingController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Data.Entities.MeterReading> Get()
         {
-            // TODO: retrieve all MeterReadings
-            return new string[] { "value1", "value2" };
+            // note: more logical use for this, would be retrieving all meter readings for a given AccountID
+            var meterReadings = _meterReadingService.GetMeterReadings();
+            // optional: filtering/paging/sorting
+            return meterReadings;
         }
 
         // GET api/<MeterReadingController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Data.Entities.MeterReading Get(int id)
         {
-            // TODO: retrieve all MeterReadings for a given AccountID (id)
-            return "value";
+            // optional: caching layer to reduce hits to DB
+            return _meterReadingService.GetMeterReadings().Where(mr => mr.MeterReadingID == id).FirstOrDefault();
         }
 
         // POST api/<MeterReadingController>
