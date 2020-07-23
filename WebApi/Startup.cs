@@ -11,6 +11,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using Data.Services;
+using Data.Interfaces;
+using Data;
+
 namespace WebApi
 {
     public class Startup
@@ -26,6 +30,9 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSingleton<IAccountService, AccountService>();
+            services.AddSingleton<IMeterReadingService, MeterReadingService>();
+            services.AddDbContext<IDbContext, DataContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
