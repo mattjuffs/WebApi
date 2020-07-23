@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Data.Interfaces;
 
 namespace Data.Services
 {
-    public class MeterReadingService
+    public class MeterReadingService : IMeterReadingService
     {
         private IDbContext _dbContext;
 

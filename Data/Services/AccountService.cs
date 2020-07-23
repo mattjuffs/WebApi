@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using Data.Interfaces;
 
 namespace Data.Services
 {
-    public class AccountService
+    public class AccountService : IAccountService
     {
         private IDbContext _dbContext;
 
